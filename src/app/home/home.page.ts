@@ -21,17 +21,19 @@ export class HomePage {
     private todoService: TodoService
   ) {
     // let taskJson = localStorage.getItem('tasksDb');
+
     // if (taskJson != null) {
     //   this.listaDeTarefas = JSON.parse(taskJson);
     // }
+
     this.loadTasks();
   }
 
   loadTasks() {
-    this.todoService.list()
-      .then(async (response: any[]) => {
-        console.table(response);
-        // this.listaDeTarefas = response
+    this.todoService
+      .list()
+      .then(async (resp: any) => {
+        this.listaDeTarefas = resp.response;
       })
       .catch(async (error) => {
         console.log(error);
@@ -94,12 +96,12 @@ export class HomePage {
       return;
     }
 
-    let task = { task_name: newTask, task_date: data, done: false };
+    let task = { name: newTask, date: data, done: false };
 
     this.listaDeTarefas.push(task);
 
     this.todoService
-      .add(task.task_name, task.task_date)
+      .add(task.name, task.date)
       .then(async (response) => {
         console.log(response);
         const toast = await this.toastCtrl.create({
@@ -120,11 +122,11 @@ export class HomePage {
     // this.updateLocalStorage()
   }
 
-  // updateLocalStorage() {
-  //   localStorage.setItem('tasksDb', JSON.stringify(this.listaDeTarefas));
-  // }
+  updateLocalStorage() {
+    localStorage.setItem('tasksDb', JSON.stringify(this.listaDeTarefas));
+  }
 
-  async openActions(task: any) {
+  async openActions(task) {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'O que deseja fazer?',
       cssClass: 'my-custom-class',
@@ -135,7 +137,7 @@ export class HomePage {
           handler: () => {
             task.done = !task.done;
 
-            // debugger;
+            debugger;
 
             this.todoService
               .update(task)
@@ -165,6 +167,6 @@ export class HomePage {
       (taskArray) => task != taskArray
     );
 
-    // this.updateLocalStorage();
+    this.updateLocalStorage();
   }
 }

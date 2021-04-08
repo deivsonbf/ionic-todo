@@ -17,7 +17,7 @@ export class TodoService {
 
     let param = {
       task_name: tarefa,
-      task_date: data,
+      task_date: data
     }
 
     return this.http.post(url , param , header).toPromise();
@@ -29,11 +29,14 @@ export class TodoService {
       headers: new HttpHeaders()
      .set('Content-Type' , `application/json`)
     } 
+
     return this.http.put(url , tarefa , header).toPromise();
   }
 
   list(){
+    
     let url = 'http://localhost:3000/tasks';
+
     return this.http.get(url).toPromise();
   }
 

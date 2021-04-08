@@ -13,7 +13,7 @@ router.get('/', (req,res,next) => {
                 conn.release();
                 if(error) { return res.status(500).send({ error: error}) }
                 return res.status(200).send({
-                    response: resultado
+                    resposta: resultado
                 })
             }
         )
