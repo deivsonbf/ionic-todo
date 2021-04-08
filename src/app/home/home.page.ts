@@ -33,7 +33,7 @@ export class HomePage {
     this.todoService
       .list()
       .then(async (resp: any) => {
-        this.listaDeTarefas = resp.response;
+        this.listaDeTarefas = resp.resposta;
       })
       .catch(async (error) => {
         console.log(error);
