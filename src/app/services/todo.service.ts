@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient , HttpHeaders } from '@angular/common/http';
+import { identifierModuleUrl } from '@angular/compiler';
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +25,21 @@ export class TodoService {
     return this.http.post(url , param , header).toPromise();
   }
 
-  update(tarefa : string){
+  update(tarefa : any , done : boolean , nome: string , data : string){
     let url = 'http://localhost:3000/tasks';
     var header = {
       headers: new HttpHeaders()
      .set('Content-Type' , `application/json`)
     } 
 
-    return this.http.put(url , tarefa , header).toPromise();
+    let param = {
+      id_task: tarefa,
+      task_done : done,
+      task_name : nome, 
+      task_date : data   
+    }
+
+    return this.http.patch(url , param , header).toPromise();
   }
 
   list(){
@@ -40,5 +49,14 @@ export class TodoService {
     return this.http.get(url).toPromise();
   }
 
+ 
+  deleted(id: any){
+debugger
 
-}
+    let url = 'http://localhost:3000/tasks/id/';
+
+      return this.http.delete(url).toPromise(); 
+
+    }
+
+  }

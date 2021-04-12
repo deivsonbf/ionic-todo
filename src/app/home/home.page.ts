@@ -25,7 +25,6 @@ export class HomePage {
     // if (taskJson != null) {
     //   this.listaDeTarefas = JSON.parse(taskJson);
     // }
-
     this.loadTasks();
   }
 
@@ -33,7 +32,7 @@ export class HomePage {
     this.todoService
       .list()
       .then(async (resp: any) => {
-        this.listaDeTarefas = resp.resposta;
+        this.listaDeTarefas = resp.response;
       })
       .catch(async (error) => {
         console.log(error);
@@ -96,7 +95,7 @@ export class HomePage {
       return;
     }
 
-    let task = { name: newTask, date: data, done: false };
+    let task = { name: newTask, date: data};
 
     this.listaDeTarefas.push(task);
 
@@ -110,6 +109,7 @@ export class HomePage {
           position: 'middle',
         });
         toast.present();
+        this.loadTasks();
       })
       .catch(async (erro) => {
         const toast = await this.toastCtrl.create({
@@ -119,30 +119,31 @@ export class HomePage {
         });
         toast.present();
       });
-    // this.updateLocalStorage()
   }
 
   updateLocalStorage() {
     localStorage.setItem('tasksDb', JSON.stringify(this.listaDeTarefas));
   }
 
-  async openActions(task) {
+  async openActions(task : any) {
+    console.log(task.task_done);
+    
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'O que deseja fazer?',
-      cssClass: 'my-custom-class',
       buttons: [
         {
-          text: task.done ? 'Desmarcar' : 'Marcar',
-          icon: task.done ? 'radio-button-off' : 'checkmark-circle',
+          text: task.task_done ? 'Desmarcar' : 'Marcar',
+          icon: task.task_done ? 'radio-button-off' : 'checkmark-circle',
           handler: () => {
-            task.done = !task.done;
-
-            debugger;
+            
+            task.task_done = !task.task_done;
 
             this.todoService
-              .update(task)
+            .update(task.id_task , task.task_done , task.task_name , task.task_date)
               .then((response) => {
-                console.log(response);
+                console.log(task.task_done);
+                console.log(task);
+                
               })
               .catch((erro) => {
                 console.error(erro);
@@ -154,7 +155,6 @@ export class HomePage {
           icon: 'close',
           role: 'cancel',
           handler: () => {
-            console.log('Cancelado');
           },
         },
       ],
@@ -162,11 +162,29 @@ export class HomePage {
     await actionSheet.present();
   }
 
-  delete(task: any) {
-    this.listaDeTarefas = this.listaDeTarefas.filter(
-      (taskArray) => task != taskArray
-    );
+ deleted(task : any) {
 
-    this.updateLocalStorage();
+    console.log(task);
+    
+  debugger;
+    this.todoService.deleted(task.id_task)
+    .then(async (response) => {
+      console.log(response);
+      const toast = await this.toastCtrl.create({
+        message: 'deletado com sucesso!',
+        duration: 2000,
+        position: 'middle',
+      });
+      toast.present();
+      this.loadTasks();
+    })
+    .catch(async (erro) => {
+      const toast = await this.toastCtrl.create({
+        message: 'Por algum motivo falhou essa bosta rsrs',
+        duration: 2000,
+        position: 'middle',
+      });
+      toast.present();
+    });
   }
 }

@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  {{mudado}}
   <div class="container">
   <ion-list class="animate__animated animate__backInDown">
     <ion-item *ngIf="listaDeTarefas.length < 1">
@@ -12,19 +13,21 @@
     </ion-item>
     <ion-item-sliding *ngFor="let task of listaDeTarefas">
       <ion-item (click)="openActions(task)">
-        <ion-icon slot="start" name="radio-button-off" color="medium" *ngIf="!task.done"></ion-icon>
-        <ion-icon slot="start" name="checkmark-circle" color="success" *ngIf="task.done"></ion-icon>
-        <ion-label *ngIf="!task.done">
+        <ion-icon slot="start" name="checkmark-circle" color="success" *ngIf="task.task_done"></ion-icon>
+        <ion-icon slot="start" name="radio-button-off" color="medium" *ngIf="!task.task_done"></ion-icon>
+        <ion-label *ngIf="!task.task_done">
           <h2>{{task.task_name}}</h2>
           <h3>{{task.task_date}}</h3>
+          <h3>{{task.task_done}}</h3>
         </ion-label>
-        <ion-label *ngIf="task.done">
+        <ion-label *ngIf="task.task_done">
           <del><h2>{{task.task_name}}</h2></del>
           <del><h3>{{task.task_date}}</h3></del>
+          <h3>{{task.task_done}}</h3>
         </ion-label>
       </ion-item> <!-- fim ion-item -->
       <ion-item-options side="end" icon="trash">
-        <ion-item-option color="danger" (click)="delete(task)">Apagar</ion-item-option> 
+        <ion-item-option color="danger" (click)="deleted(task)">Apagar</ion-item-option> 
       </ion-item-options> <!-- fim ion-item-options -->
     </ion-item-sliding> <!-- fim ion-item-sliding -->
 

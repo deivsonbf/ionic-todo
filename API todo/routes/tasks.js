@@ -13,7 +13,7 @@ router.get('/', (req,res,next) => {
                 conn.release();
                 if(error) { return res.status(500).send({ error: error}) }
                 return res.status(200).send({
-                    resposta: resultado
+                    response: resultado
                 })
             }
         )
@@ -72,7 +72,7 @@ router.patch('/' , (req , res , next)  => {
 
         conn.query('UPDATE TASKS SET TASK_NAME = ?, TASK_DATE = ? , TASK_DONE = ?  WHERE ID_TASK = ?',
         [
-            req.body.task_name ,
+            req.body.task_name,
             req.body.task_date, 
             req.body.task_done, 
             req.body.id_task
@@ -90,7 +90,7 @@ router.patch('/' , (req , res , next)  => {
 });
 
 // exclui um produto
-router.delete('/' , (req , res , next)  => {
+router.delete('/:id' , (req , res , next)  => {
     mysql.getConnection((error , conn) => {
         
         if(error) { return res.status(500).send({ error: error}) }
@@ -102,9 +102,9 @@ router.delete('/' , (req , res , next)  => {
             if(error) { return res.status(500).send({ error: error}) }
             res.status(202).send({
                 mensagem: "deletado com sucesso", 
-            });
-        }
-        )
+                response: resultado
+            })
+        });
     });
 });
 
